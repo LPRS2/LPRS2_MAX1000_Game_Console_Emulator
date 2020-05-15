@@ -27,6 +27,7 @@ def options(opt):
 
 def configure(conf):
 	conf.env.append_value('CXXFLAGS', '-std=c++11')
+	conf.env.append_value('LIB', 'pthread')
 	
 	conf.check_cfg(
 		package = 'sfml-graphics',
