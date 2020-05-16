@@ -10,6 +10,7 @@
 ###############################################################################
 
 import os
+import sys
 import fnmatch
 import shutil
 import datetime
@@ -27,6 +28,13 @@ top = '.'
 def prerequisites(ctx):
 	ctx.recurse('emulator')
 
+	if sys.platform.startswith('linux'):
+		# Ubuntu.
+		ctx.exec_command2('sudo apt-get -y install python-pil')
+	elif sys.platform == 'msys':
+		# MSYS2 Windows.
+		ctx.exec_command2('pacman --noconfirm -S mingw-w64-python-pillow')
+
 def options(opt):
 	opt.load('compiler_c compiler_cxx')
 	
@@ -38,6 +46,13 @@ def configure(conf):
 	conf.recurse('emulator')
 
 	conf.env.append_value('CFLAGS', '-std=c99')
+	
+	conf.find_program(
+		'img_to_src.py',
+		var = 'IMG_TO_SRC',
+		path_list = os.path.abspath('.')
+	)
+	
 
 def build(bld):
 	bld.recurse('emulator')
@@ -49,6 +64,20 @@ def build(bld):
 			use = 'emulator',
 			target = p
 		)
+		
+	if True:
+		bld(
+			rule = '${IMG_TO_SRC} -f RGB333 -o ${TGT} ${SRC}',
+			source = 'images/Pacman_Sprite_Map.png',
+			target = 'sprites.c'
+		)
+		for p in ['sprite_anim']:
+			bld.program(
+				features = 'cxx',
+				source = [p + '.c', 'sprites.c'],
+				use = 'emulator',
+				target = p
+			)
 	
 ###############################################################################
 
