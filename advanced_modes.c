@@ -121,6 +121,7 @@ int main(void) {
 		
 		/////////////////////////////////////
 		// Poll controls.
+		
 		int mov_x = 0;
 		int mov_y = 0;
 		if(joypad.down){
@@ -178,82 +179,82 @@ int main(void) {
 		
 		
 #if !IDX4_0_RGB333_1
-	// Packed IDX4 mode.
-	
-	palette_p32[0] = 0x00ff0000; // Blue.
-	palette_p32[1] = 0x000000ff; // Red.
-	palette_p32[2] = 0x0000ff00; // Green.
-	
-	
-	
-	// Blue background.
-	for(int r1 = 0; r1 < SCREEN_IDX4_H; r1++){
-		for(int c8 = 0; c8 < SCREEN_IDX4_W/8; c8++){
-			pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x00000000;
-		}
-	}
-	
-	
-	
-	// Red rectangle.
-	for(int r1 = gs.rect8.y*8; r1 < (gs.rect8.y+RECT_H8)*8; r1++){
-		for(int c8 = gs.rect8.x; c8 < gs.rect8.x+RECT_W8; c8++){
-			pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x11111111;
-		}
-	}
-	
-	
-	
-	// Green square.
-	for(int r1 = gs.sq8.y*8; r1 < (gs.sq8.y+SQ_A8)*8; r1++){
-		for(int c8 = gs.sq8.x; c8 < gs.sq8.x+SQ_A8; c8++){
-			pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x22222222;
-		}
-	}
-	
+		// Packed IDX4 mode.
+		
+		palette_p32[0] = 0x00ff0000; // Blue.
+		palette_p32[1] = 0x000000ff; // Red.
+		palette_p32[2] = 0x0000ff00; // Green.
 		
 		
-	// For testing.
+		
+		// Blue background.
+		for(int r1 = 0; r1 < SCREEN_IDX4_H; r1++){
+			for(int c8 = 0; c8 < SCREEN_IDX4_W/8; c8++){
+				pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x00000000;
+			}
+		}
+		
+		
+		
+		// Red rectangle.
+		for(int r1 = gs.rect8.y*8; r1 < (gs.rect8.y+RECT_H8)*8; r1++){
+			for(int c8 = gs.rect8.x; c8 < gs.rect8.x+RECT_W8; c8++){
+				pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x11111111;
+			}
+		}
+		
+		
+		
+		// Green square.
+		for(int r1 = gs.sq8.y*8; r1 < (gs.sq8.y+SQ_A8)*8; r1++){
+			for(int c8 = gs.sq8.x; c8 < gs.sq8.x+SQ_A8; c8++){
+				pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x22222222;
+			}
+		}
+		
+			
+			
+		// For testing.
 #if 0
-	gpu_p32[1] = 0;
-	// Unpacked.
-	for(int r = 0; r < SCREEN_IDX4_H; r++){
-		for(int c = 0; c < SCREEN_IDX4_W; c++){
-			unpack_idx4_p32[r*SCREEN_IDX4_W + c] = 0;
+		gpu_p32[1] = 0;
+		// Unpacked.
+		for(int r = 0; r < SCREEN_IDX4_H; r++){
+			for(int c = 0; c < SCREEN_IDX4_W; c++){
+				unpack_idx4_p32[r*SCREEN_IDX4_W + c] = 0;
+			}
 		}
-	}
 #endif
 
 #else
-	// Unpacked RGB333 mode.
+		// Unpacked RGB333 mode.
 
 
-	// Blue background.
-	for(int r = 0; r < SCREEN_RGB333_H; r++){
-		for(int c = 0; c < SCREEN_RGB333_W; c++){
-			unpack_rgb333_p32[r*SCREEN_RGB333_W + c] = 0700; // Octal format.
+		// Blue background.
+		for(int r = 0; r < SCREEN_RGB333_H; r++){
+			for(int c = 0; c < SCREEN_RGB333_W; c++){
+				unpack_rgb333_p32[r*SCREEN_RGB333_W + c] = 0700; // Octal format.
+			}
 		}
-	}
-	
-	
-	
-	// Red rectangle.
-	for(int r1 = gs.rect8.y*8; r1 < (gs.rect8.y+RECT_H8)*8; r1++){
-		for(int c1 = gs.rect8.x*8; c1 < (gs.rect8.x+RECT_W8)*8; c1++){
-			unpack_rgb333_p32[r1*SCREEN_RGB333_W + c1] = 0007;
+		
+		
+		
+		// Red rectangle.
+		for(int r1 = gs.rect8.y*8; r1 < (gs.rect8.y+RECT_H8)*8; r1++){
+			for(int c1 = gs.rect8.x*8; c1 < (gs.rect8.x+RECT_W8)*8; c1++){
+				unpack_rgb333_p32[r1*SCREEN_RGB333_W + c1] = 0007;
+			}
 		}
-	}
-	
-	
-	
-	// Green square.
-	for(int r1 = gs.sq8.y*8; r1 < (gs.sq8.y+SQ_A8)*8; r1++){
-		for(int c1 = gs.sq8.x*8; c1 < (gs.sq8.x+SQ_A8)*8; c1++){
-			unpack_rgb333_p32[r1*SCREEN_RGB333_W + c1] = 0070;
+		
+		
+		
+		// Green square.
+		for(int r1 = gs.sq8.y*8; r1 < (gs.sq8.y+SQ_A8)*8; r1++){
+			for(int c1 = gs.sq8.x*8; c1 < (gs.sq8.x+SQ_A8)*8; c1++){
+				unpack_rgb333_p32[r1*SCREEN_RGB333_W + c1] = 0070;
+			}
 		}
-	}
-	
-	
+		
+		
 	
 	
 	

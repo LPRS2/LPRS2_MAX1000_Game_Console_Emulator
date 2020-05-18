@@ -69,15 +69,15 @@ def build(bld):
 		bld(
 			rule = '${IMG_TO_SRC} -f RGB333 -o ${TGT} ${SRC}',
 			source = 'images/Pacman_Sprite_Map.png',
-			target = 'sprites.c'
+			target = 'sprites_rgb333.c'
 		)
-		for p in ['sprite_anim']:
-			bld.program(
-				features = 'cxx',
-				source = [p + '.c', 'sprites.c'],
-				use = 'emulator',
-				target = p
-			)
+		bld.program(
+			features = 'cxx',
+			source = ['sprite_anim.c', 'sprites_rgb333.c'],
+			includes = ['build/'],
+			use = 'emulator',
+			target = 'sprite_anim'
+		)
 	
 ###############################################################################
 
