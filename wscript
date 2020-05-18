@@ -30,7 +30,7 @@ def prerequisites(ctx):
 
 	if sys.platform.startswith('linux'):
 		# Ubuntu.
-		ctx.exec_command2('sudo apt-get -y install python-pil')
+		ctx.exec_command2('apt-get -y install python-pil')
 	elif sys.platform == 'msys':
 		# MSYS2 Windows.
 		ctx.exec_command2('pacman --noconfirm -S mingw-w64-python-pillow')
