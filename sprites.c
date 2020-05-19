@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "system.h"
 #include <stdio.h>
+#include <string.h>
 
 #include "sprites_idx4.h"
 
@@ -54,39 +55,31 @@ typedef struct {
 ///////////////////////////////////////////////////////////////////////////////
 // Game config.
 
-#define STEP 1
 
-#define PACMAN_ANIM_DELAY 3
 
 ///////////////////////////////////////////////////////////////////////////////
 // Game data structures.
 
 typedef struct {
-	uint16_t x;
-	uint16_t y;
-} point_t;
-
-typedef enum {
-	PACMAN_IDLE,
-	PACMAN_OPENING_MOUTH,
-	PACMAN_WITH_OPEN_MOUTH,
-	PACMAN_CLOSING_MOUTH,
-	PACMAN_WITH_CLOSED_MOUTH
-} pacman_anim_steps_t;
-
-typedef struct {
-	pacman_anim_steps_t step;
-	uint8_t delay_cnt;
-} pacman_anim_t;
-
-typedef struct {
-	point_t pos;
-	pacman_anim_t anim;
-} pacman_t;
-
-typedef struct {
-	pacman_t pacman;
+	uint8_t digits[4]; // digits[0] is fastest.
 } game_state_t;
+
+
+
+uint32_t* red__p[16] = {
+	red_0__p, red_1__p, red_2__p, red_3__p,
+	red_4__p, red_5__p, red_6__p, red_7__p,
+	red_8__p, red_9__p, red_a__p, red_b__p,
+	red_c__p, red_d__p, red_e__p, red_f__p
+};
+
+uint32_t* green__p[16] = {
+	green_0__p, green_1__p, green_2__p, green_3__p,
+	green_4__p, green_5__p, green_6__p, green_7__p,
+	green_8__p, green_9__p, green_a__p, green_b__p,
+	green_c__p, green_d__p, green_e__p, green_f__p
+};
+
 
 static inline uint32_t shift_div_with_round_down(uint32_t num, uint32_t shift){
 	uint32_t d = num >> shift;
@@ -109,6 +102,7 @@ static void draw_sprite(
 	uint16_t dst_x,
 	uint16_t dst_y
 ) {
+	
 	uint16_t dst_x8 = shift_div_with_round_down(dst_x, 3);
 	uint16_t src_w8 = shift_div_with_round_up(src_w, 3);
 	
@@ -118,6 +112,7 @@ static void draw_sprite(
 			pack_idx4_p32[(dst_y+y)*SCREEN_IDX4_W8 + (dst_x8+x8)] = i;
 		}
 	}
+	
 	
 }
 
@@ -139,9 +134,9 @@ int main(void) {
 	
 	
 	
-	
 	// Game state.
 	game_state_t gs;
+	memset(&gs, 0, sizeof(gs));
 	
 	
 	while(1){
@@ -154,8 +149,47 @@ int main(void) {
 		/////////////////////////////////////
 		// Gameplay.
 		
+		// Stopwatch for 60Hz (no using floating point).
 		
-		
+		// 100th of the seconds.
+		switch(gs.digits[0]){
+		case 0: // 0.000...
+			gs.digits[0] = 2;
+			break;
+		case 2: // 0.016...
+			gs.digits[0] = 3;
+			break;
+		case 3: // 0.033...
+			gs.digits[0] = 5;
+			break;
+		case 5: // 0.050...
+			gs.digits[0] = 7;
+			break;
+		case 7: // 0.066...
+			gs.digits[0] = 8;
+			break;
+		case 8: // 0.083...
+			gs.digits[0] = 0;
+			
+			// 10th of the seconds.
+			gs.digits[1]++;
+			if(gs.digits[1] == 10){
+				gs.digits[1] = 0;
+				
+				// seconds.
+				gs.digits[2]++;
+				if(gs.digits[2] == 10){
+					gs.digits[2] = 0;
+					
+					// 10s of seconds.
+					gs.digits[3]++;
+					if(gs.digits[3] == 10){
+						gs.digits[3] = 0;
+					}
+				}
+			}
+			break;
+		}
 		
 		
 		
@@ -176,14 +210,16 @@ int main(void) {
 				pack_idx4_p32[r1*SCREEN_IDX4_W8 + c8] = 0x00000000;
 			}
 		}
-
-
-		draw_sprite(green_0__p, 32, 64, 16, 16);
 		
 		
-		break;
+		
+		// Draw digits of stopwatch.
+		draw_sprite(red__p  [gs.digits[3]], 32, 64, 32+(3-3)*40, 32);
+		draw_sprite(red__p  [gs.digits[2]], 32, 64, 32+(3-2)*40, 32);
+		draw_sprite(green__p[gs.digits[1]], 32, 64, 32+(3-1)*40, 32);
+		draw_sprite(green__p[gs.digits[0]], 32, 64, 32+(3-0)*40, 32);
+		
 	}
-	while(1){}
 
 	return 0;
 }

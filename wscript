@@ -14,6 +14,7 @@ import sys
 import fnmatch
 import shutil
 import datetime
+import glob
 
 import waflib
 
@@ -66,11 +67,13 @@ def build(bld):
 		)
 		
 	if True:
+		digit_imgs = sorted(
+			glob.glob('images/red_*.png') + glob.glob('images/green_*.png')
+		)
 		bld(
 			rule = '${IMG_TO_SRC} -o ${TGT[0]} ${SRC} -f IDX4 ' + \
 				'-p 0x000000 -v',
-			#source = 'images/red_0.png images/green_0.png',
-			source = 'images/green_0.png',
+			source = digit_imgs,
 			target = ['sprites_idx4.c', 'sprites_idx4.h']
 		)
 		bld(
@@ -95,6 +98,17 @@ def build(bld):
 	
 ###############################################################################
 
+def exec_command2(self, cmd, **kw):
+	# Log output while running command.
+	kw['stdout'] = None
+	kw['stderr'] = None
+	ret = self.exec_command(cmd, **kw)
+	if ret != 0:
+		self.fatal('Command "{}" returned {}'.format(cmd, ret))
+setattr(waflib.Context.Context, 'exec_command2', exec_command2)
+
+###############################################################################
+
 def recursive_glob(pattern, directory = '.'):
 	for root, dirs, files in os.walk(directory, followlinks = True):
 		for f in files:
@@ -115,15 +129,6 @@ def collect_git_ignored_files():
 					yield f
 
 ###############################################################################
-
-def exec_command2(self, cmd, **kw):
-	# Log output while running command.
-	kw['stdout'] = None
-	kw['stderr'] = None
-	ret = self.exec_command(cmd, **kw)
-	if ret != 0:
-		self.fatal('Command "{}" returned {}'.format(cmd, ret))
-setattr(waflib.Context.Context, 'exec_command2', exec_command2)
 
 def distclean(ctx):
 	for fn in collect_git_ignored_files():
