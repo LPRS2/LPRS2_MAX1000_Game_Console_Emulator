@@ -66,9 +66,7 @@ def build(bld):
 		)
 		
 	if True:
-		#TODO This ignore return value of command.
 		tg1 = bld(
-			name = 'img1',
 			rule = '${IMG_TO_SRC} -f IDX4 -o ${TGT[0]} ${SRC} -p 0x000000',
 			#source = 'images/red_0.png images/green_0.png',
 			source = 'images/red_0.png',
@@ -76,7 +74,6 @@ def build(bld):
 		)
 		'''
 		bld(
-			name = 'img2',
 			rule = '${IMG_TO_SRC} -f RGB333 -o ${TGT} ${SRC}',
 			source = 'images/Pacman_Sprite_Map.png',
 			target = 'sprites_rgb333.c'
@@ -84,10 +81,9 @@ def build(bld):
 		'''
 		bld.program(
 			features = 'cxx',
-			#after = ['img1'], #TODO Does not quite work.
 			source = ['sprites.c', 'sprites_idx4.c'],
 			includes = ['build/'],
-			use = 'emulator sprites_idx4.h',
+			use = 'emulator',
 			target = 'sprites'
 		)
 		'''
