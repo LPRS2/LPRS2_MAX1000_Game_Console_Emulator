@@ -67,13 +67,14 @@ def build(bld):
 		
 	if True:
 		bld(
-			rule = '${IMG_TO_SRC} -f IDX4 -o ${TGT[0]} ${SRC} -p 0x000000',
+			rule = '${IMG_TO_SRC} -o ${TGT[0]} ${SRC} -f IDX4 ' + \
+				'-p 0x000000 -v',
 			#source = 'images/red_0.png images/green_0.png',
 			source = 'images/green_0.png',
 			target = ['sprites_idx4.c', 'sprites_idx4.h']
 		)
 		bld(
-			rule = '${IMG_TO_SRC} -f RGB333 -o ${TGT[0]} ${SRC}',
+			rule = '${IMG_TO_SRC} -o ${TGT[0]} ${SRC} -f RGB333',
 			source = 'images/Pacman_Sprite_Map.png',
 			target = ['sprites_rgb333.c', 'sprites_rgb333.h']
 		)
