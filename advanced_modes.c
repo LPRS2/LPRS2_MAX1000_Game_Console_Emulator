@@ -212,8 +212,8 @@ int main(void) {
 			}
 		}
 		
-			
-			
+		
+		
 		// For testing.
 #if 0
 		gpu_p32[1] = 0;
