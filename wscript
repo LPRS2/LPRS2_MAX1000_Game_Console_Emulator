@@ -69,7 +69,7 @@ def build(bld):
 		bld(
 			rule = '${IMG_TO_SRC} -f IDX4 -o ${TGT[0]} ${SRC} -p 0x000000',
 			#source = 'images/red_0.png images/green_0.png',
-			source = 'images/red_0.png',
+			source = 'images/green_0.png',
 			target = ['sprites_idx4.c', 'sprites_idx4.h']
 		)
 		bld(
