@@ -87,15 +87,15 @@ typedef struct {
 } game_state_t;
 
 void draw_sprite_from_atlas(
-	int src_x,
-	int src_y,
-	int w,
-	int h,
-	int dst_x,
-	int dst_y
+	uint32_t src_x,
+	uint32_t src_y,
+	uint32_t w,
+	uint32_t h,
+	uint32_t dst_x,
+	uint32_t dst_y
 ) {
-	for(int y = 0; y < h; y++){
-		for(int x = 0; x < w; x++){
+	for(uint32_t y = 0; y < h; y++){
+		for(uint32_t x = 0; x < w; x++){
 			uint16_t p = Pacman_Sprite_Map__p[
 				(src_y+y)*Pacman_Sprite_Map__w + (src_x+x)
 			];
@@ -206,8 +206,8 @@ int main(void) {
 		
 		
 		// Black background.
-		for(int r = 0; r < SCREEN_RGB333_H; r++){
-			for(int c = 0; c < SCREEN_RGB333_W; c++){
+		for(uint32_t r = 0; r < SCREEN_RGB333_H; r++){
+			for(uint32_t c = 0; c < SCREEN_RGB333_W; c++){
 				unpack_rgb333_p32[r*SCREEN_RGB333_W + c] = 0000;
 			}
 		}
