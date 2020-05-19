@@ -19,6 +19,8 @@
 #define SCREEN_RGB333_W 160
 #define SCREEN_RGB333_H 120
 
+#define SCREEN_IDX4_W8 (SCREEN_IDX4_W/8)
+
 #define gpu_p32 ((volatile uint32_t*)LPRS2_GPU_BASE)
 #define palette_p32 ((volatile uint32_t*)(LPRS2_GPU_BASE+0x1000))
 #define unpack_idx1_p32 ((volatile uint32_t*)(LPRS2_GPU_BASE+0x400000))
@@ -189,8 +191,8 @@ int main(void) {
 		
 		// Blue background.
 		for(int r1 = 0; r1 < SCREEN_IDX4_H; r1++){
-			for(int c8 = 0; c8 < SCREEN_IDX4_W/8; c8++){
-				pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x00000000;
+			for(int c8 = 0; c8 < SCREEN_IDX4_W8; c8++){
+				pack_idx4_p32[r1*SCREEN_IDX4_W8 + c8] = 0x00000000;
 			}
 		}
 		
@@ -199,7 +201,7 @@ int main(void) {
 		// Red rectangle.
 		for(int r1 = gs.rect8.y*8; r1 < (gs.rect8.y+RECT_H8)*8; r1++){
 			for(int c8 = gs.rect8.x; c8 < gs.rect8.x+RECT_W8; c8++){
-				pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x11111111;
+				pack_idx4_p32[r1*SCREEN_IDX4_W8 + c8] = 0x11111111;
 			}
 		}
 		
@@ -208,7 +210,7 @@ int main(void) {
 		// Green square.
 		for(int r1 = gs.sq8.y*8; r1 < (gs.sq8.y+SQ_A8)*8; r1++){
 			for(int c8 = gs.sq8.x; c8 < gs.sq8.x+SQ_A8; c8++){
-				pack_idx4_p32[r1*(SCREEN_IDX4_W/8) + c8] = 0x22222222;
+				pack_idx4_p32[r1*SCREEN_IDX4_W8 + c8] = 0x22222222;
 			}
 		}
 		

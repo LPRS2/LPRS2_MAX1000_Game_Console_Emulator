@@ -21,6 +21,8 @@
 #define SCREEN_RGB333_W 160
 #define SCREEN_RGB333_H 120
 
+#define SCREEN_IDX4_W8 (SCREEN_IDX4_W/8)
+
 #define gpu_p32 ((volatile uint32_t*)LPRS2_GPU_BASE)
 #define palette_p32 ((volatile uint32_t*)(LPRS2_GPU_BASE+0x1000))
 #define unpack_idx1_p32 ((volatile uint32_t*)(LPRS2_GPU_BASE+0x400000))
