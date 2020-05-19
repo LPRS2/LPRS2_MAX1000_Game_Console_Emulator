@@ -66,19 +66,17 @@ def build(bld):
 		)
 		
 	if True:
-		tg1 = bld(
+		bld(
 			rule = '${IMG_TO_SRC} -f IDX4 -o ${TGT[0]} ${SRC} -p 0x000000',
 			#source = 'images/red_0.png images/green_0.png',
 			source = 'images/red_0.png',
 			target = ['sprites_idx4.c', 'sprites_idx4.h']
 		)
-		'''
 		bld(
-			rule = '${IMG_TO_SRC} -f RGB333 -o ${TGT} ${SRC}',
+			rule = '${IMG_TO_SRC} -f RGB333 -o ${TGT[0]} ${SRC}',
 			source = 'images/Pacman_Sprite_Map.png',
-			target = 'sprites_rgb333.c'
+			target = ['sprites_rgb333.c', 'sprites_rgb333.h']
 		)
-		'''
 		bld.program(
 			features = 'cxx',
 			source = ['sprites.c', 'sprites_idx4.c'],
@@ -86,16 +84,13 @@ def build(bld):
 			use = 'emulator',
 			target = 'sprites'
 		)
-		'''
 		bld.program(
 			features = 'cxx',
-			after = ['img2'],
 			source = ['sprite_anim.c', 'sprites_rgb333.c'],
 			includes = ['build/'],
 			use = 'emulator',
 			target = 'sprite_anim'
 		)
-		'''
 	
 ###############################################################################
 
