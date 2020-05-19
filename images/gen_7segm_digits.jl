@@ -1,10 +1,13 @@
 #!/usr/bin/env julia
 
+using Printf
+
 background_color = "black"
 #background_color = "white" #TODO For debug.
 
 function gen_digit(color_name, color, digit)
-	file_name = "$(color_name)_$digit"
+	hex_digit = @sprintf("%x", digit)
+	file_name = "$(color_name)_$hex_digit"
 	open("$file_name.svg", "w") do of
 		p(args...) = println(of, args...)
 		p("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")

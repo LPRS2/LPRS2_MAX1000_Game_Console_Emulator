@@ -178,8 +178,7 @@ int main(void) {
 		}
 
 
-		//draw_sprite(red_0__p, red_0__w/8, 0, 0, red_0__w/8, red_0__h, 0, 0);
-		draw_sprite(green_0__p, green_0__w, green_0__h, 16, 16);
+		draw_sprite(green_0__p, 32, 64, 16, 16);
 		
 		
 		break;
