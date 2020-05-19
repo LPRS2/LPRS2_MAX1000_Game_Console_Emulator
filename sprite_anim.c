@@ -74,7 +74,7 @@ typedef enum {
 
 typedef struct {
 	pacman_anim_steps_t step;
-	int delay_cnt;
+	uint8_t delay_cnt;
 } pacman_anim_t;
 
 typedef struct {

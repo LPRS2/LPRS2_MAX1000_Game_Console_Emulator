@@ -218,8 +218,8 @@ int main(void) {
 #if 0
 		gpu_p32[1] = 0;
 		// Unpacked.
-		for(int r = 0; r < SCREEN_IDX4_H; r++){
-			for(int c = 0; c < SCREEN_IDX4_W; c++){
+		for(uint16_t r = 0; r < SCREEN_IDX4_H; r++){
+			for(uint16_t c = 0; c < SCREEN_IDX4_W; c++){
 				unpack_idx4_p32[r*SCREEN_IDX4_W + c] = 0;
 			}
 		}
@@ -230,8 +230,8 @@ int main(void) {
 
 
 		// Blue background.
-		for(int r = 0; r < SCREEN_RGB333_H; r++){
-			for(int c = 0; c < SCREEN_RGB333_W; c++){
+		for(uint16_t r = 0; r < SCREEN_RGB333_H; r++){
+			for(uint16_t c = 0; c < SCREEN_RGB333_W; c++){
 				unpack_rgb333_p32[r*SCREEN_RGB333_W + c] = 0700; // Octal format.
 			}
 		}
@@ -239,8 +239,8 @@ int main(void) {
 		
 		
 		// Red rectangle.
-		for(int r1 = gs.rect8.y*8; r1 < (gs.rect8.y+RECT_H8)*8; r1++){
-			for(int c1 = gs.rect8.x*8; c1 < (gs.rect8.x+RECT_W8)*8; c1++){
+		for(uint16_t r1 = gs.rect8.y*8; r1 < (gs.rect8.y+RECT_H8)*8; r1++){
+			for(uint16_t c1 = gs.rect8.x*8; c1 < (gs.rect8.x+RECT_W8)*8; c1++){
 				unpack_rgb333_p32[r1*SCREEN_RGB333_W + c1] = 0007;
 			}
 		}
@@ -248,8 +248,8 @@ int main(void) {
 		
 		
 		// Green square.
-		for(int r1 = gs.sq8.y*8; r1 < (gs.sq8.y+SQ_A8)*8; r1++){
-			for(int c1 = gs.sq8.x*8; c1 < (gs.sq8.x+SQ_A8)*8; c1++){
+		for(uint16_t r1 = gs.sq8.y*8; r1 < (gs.sq8.y+SQ_A8)*8; r1++){
+			for(uint16_t c1 = gs.sq8.x*8; c1 < (gs.sq8.x+SQ_A8)*8; c1++){
 				unpack_rgb333_p32[r1*SCREEN_RGB333_W + c1] = 0070;
 			}
 		}
