@@ -218,10 +218,10 @@ int main(void) {
 		
 		
 		// Draw digits of stopwatch.
-		draw_sprite(red__p  [gs.digits[3]], 32, 64, 32+(3-3)*40, 32);
-		draw_sprite(red__p  [gs.digits[2]], 32, 64, 32+(3-2)*40, 32);
-		draw_sprite(green__p[gs.digits[1]], 32, 64, 32+(3-1)*40, 32);
-		draw_sprite(green__p[gs.digits[0]], 32, 64, 32+(3-0)*40, 32);
+		draw_sprite(red__p  [gs.digits[3]], 32, 64, (4-3)*40, 32);
+		draw_sprite(red__p  [gs.digits[2]], 32, 64, (4-2)*40, 32);
+		draw_sprite(green__p[gs.digits[1]], 32, 64, (4-1)*40, 32);
+		draw_sprite(green__p[gs.digits[0]], 32, 64, (4-0)*40, 32);
 		
 	}
 
