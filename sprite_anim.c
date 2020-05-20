@@ -56,7 +56,9 @@ typedef struct {
 
 #define STEP 1
 
+
 #define PACMAN_ANIM_DELAY 3
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Game data structures.
@@ -66,27 +68,44 @@ typedef struct {
 	uint16_t y;
 } point_t;
 
+
+
 typedef enum {
 	PACMAN_IDLE,
 	PACMAN_OPENING_MOUTH,
 	PACMAN_WITH_OPEN_MOUTH,
 	PACMAN_CLOSING_MOUTH,
 	PACMAN_WITH_CLOSED_MOUTH
-} pacman_anim_steps_t;
+} pacman_anim_states_t;
+
+
 
 typedef struct {
-	pacman_anim_steps_t step;
+	pacman_anim_states_t state;
 	uint8_t delay_cnt;
 } pacman_anim_t;
+
+
 
 typedef struct {
 	point_t pos;
 	pacman_anim_t anim;
 } pacman_t;
 
+
+
+
+
+
 typedef struct {
 	pacman_t pacman;
 } game_state_t;
+
+
+
+
+
+
 
 void draw_sprite_from_atlas(
 	uint16_t src_x,
@@ -96,14 +115,22 @@ void draw_sprite_from_atlas(
 	uint16_t dst_x,
 	uint16_t dst_y
 ) {
+	
+	
 	for(uint16_t y = 0; y < h; y++){
 		for(uint16_t x = 0; x < w; x++){
-			uint16_t p = Pacman_Sprite_Map__p[
-				(src_y+y)*Pacman_Sprite_Map__w + (src_x+x)
-			];
-			unpack_rgb333_p32[(dst_y+y)*SCREEN_RGB333_W + (dst_x+x)] = p;
+			uint32_t src_idx = 
+				(src_y+y)*Pacman_Sprite_Map__w +
+				(src_x+x);
+			uint32_t dst_idx = 
+				(dst_y+y)*SCREEN_RGB333_W +
+				(dst_x+x);
+			uint16_t pixel = Pacman_Sprite_Map__p[src_idx];
+			unpack_rgb333_p32[dst_idx] = pixel;
 		}
 	}
+	
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,7 +147,7 @@ int main(void) {
 	game_state_t gs;
 	gs.pacman.pos.x = 32;
 	gs.pacman.pos.y = 32;
-	gs.pacman.anim.step = PACMAN_IDLE;
+	gs.pacman.anim.state = PACMAN_IDLE;
 	gs.pacman.anim.delay_cnt = 0;
 	
 	
@@ -144,11 +171,11 @@ int main(void) {
 		gs.pacman.pos.y += mov_y*STEP;
 		
 		
-		switch(gs.pacman.anim.step){
+		switch(gs.pacman.anim.state){
 		case PACMAN_IDLE:
 			if(mov_x != 0 || mov_y != 0){
 				gs.pacman.anim.delay_cnt = PACMAN_ANIM_DELAY;
-				gs.pacman.anim.step = PACMAN_WITH_OPEN_MOUTH;
+				gs.pacman.anim.state = PACMAN_WITH_OPEN_MOUTH;
 			}
 			break;
 		case PACMAN_OPENING_MOUTH:
@@ -156,7 +183,7 @@ int main(void) {
 					gs.pacman.anim.delay_cnt--;
 			}else{
 				gs.pacman.anim.delay_cnt = PACMAN_ANIM_DELAY;
-				gs.pacman.anim.step = PACMAN_WITH_OPEN_MOUTH;
+				gs.pacman.anim.state = PACMAN_WITH_OPEN_MOUTH;
 			}
 			break;
 		case PACMAN_WITH_OPEN_MOUTH:
@@ -165,9 +192,9 @@ int main(void) {
 			}else{
 				if(mov_x != 0 || mov_y != 0){
 					gs.pacman.anim.delay_cnt = PACMAN_ANIM_DELAY;
-					gs.pacman.anim.step = PACMAN_CLOSING_MOUTH;
+					gs.pacman.anim.state = PACMAN_CLOSING_MOUTH;
 				}else{
-					gs.pacman.anim.step = PACMAN_IDLE;
+					gs.pacman.anim.state = PACMAN_IDLE;
 				}
 			}
 			break;
@@ -176,7 +203,7 @@ int main(void) {
 					gs.pacman.anim.delay_cnt--;
 			}else{
 				gs.pacman.anim.delay_cnt = PACMAN_ANIM_DELAY;
-				gs.pacman.anim.step = PACMAN_WITH_CLOSED_MOUTH;
+				gs.pacman.anim.state = PACMAN_WITH_CLOSED_MOUTH;
 			}
 			break;
 		case PACMAN_WITH_CLOSED_MOUTH:
@@ -185,9 +212,9 @@ int main(void) {
 			}else{
 				if(mov_x != 0 || mov_y != 0){
 					gs.pacman.anim.delay_cnt = PACMAN_ANIM_DELAY;
-					gs.pacman.anim.step = PACMAN_OPENING_MOUTH;
+					gs.pacman.anim.state = PACMAN_OPENING_MOUTH;
 				}else{
-					gs.pacman.anim.step = PACMAN_IDLE;
+					gs.pacman.anim.state = PACMAN_IDLE;
 				}
 			}
 			break;
@@ -216,21 +243,31 @@ int main(void) {
 		
 		
 		
+		
+		
+		
+		
 		// Draw pacman.
-		switch(gs.pacman.anim.step){
+		switch(gs.pacman.anim.state){
 		case PACMAN_IDLE:
 		case PACMAN_OPENING_MOUTH:
 		case PACMAN_CLOSING_MOUTH:
 			// Half open mouth.
-			draw_sprite_from_atlas(16, 0, 16, 16, gs.pacman.pos.x, gs.pacman.pos.y);
+			draw_sprite_from_atlas(
+				16, 0, 16, 16, gs.pacman.pos.x, gs.pacman.pos.y
+			);
 			break;
 		case PACMAN_WITH_OPEN_MOUTH:
 			// Full open mouth.
-			draw_sprite_from_atlas(0, 0, 16, 16, gs.pacman.pos.x, gs.pacman.pos.y);
+			draw_sprite_from_atlas(
+				0, 0, 16, 16, gs.pacman.pos.x, gs.pacman.pos.y
+			);
 			break;
 		case PACMAN_WITH_CLOSED_MOUTH:
 			// Close mouth.
-			draw_sprite_from_atlas(32, 0, 16, 16, gs.pacman.pos.x, gs.pacman.pos.y);
+			draw_sprite_from_atlas(
+				32, 0, 16, 16, gs.pacman.pos.x, gs.pacman.pos.y
+			);
 			break;
 		}
 		

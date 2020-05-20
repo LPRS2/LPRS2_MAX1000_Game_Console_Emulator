@@ -98,22 +98,26 @@ static inline uint32_t shift_div_with_round_up(uint32_t num, uint32_t shift){
 
 
 static void draw_sprite(
-	uint32_t* p,
+	uint32_t* src_p,
 	uint16_t src_w,
 	uint16_t src_h,
 	uint16_t dst_x,
 	uint16_t dst_y
 ) {
 	
+	
 	uint16_t dst_x8 = shift_div_with_round_down(dst_x, 3);
 	uint16_t src_w8 = shift_div_with_round_up(src_w, 3);
+	
 	
 	
 	for(uint16_t y = 0; y < src_h; y++){
 		for(uint16_t x8 = 0; x8 < src_w8; x8++){
 			uint32_t src_idx = y*src_w8 + x8;
-			uint32_t pixels = p[src_idx];
-			uint32_t dst_idx = (dst_y+y)*SCREEN_IDX4_W8 + (dst_x8+x8);
+			uint32_t pixels = src_p[src_idx];
+			uint32_t dst_idx =
+				(dst_y+y)*SCREEN_IDX4_W8 +
+				(dst_x8+x8);
 			pack_idx4_p32[dst_idx] = pixels;
 		}
 	}
@@ -130,6 +134,7 @@ int main(void) {
 	gpu_p32[0] = 2; // IDX4 mode.
 	gpu_p32[1] = 1; // Packed mode.
 	gpu_p32[0x800] = 0x00ff00ff; // Magenta for HUD.
+	
 	
 	
 	// Copy palette.
@@ -198,6 +203,9 @@ int main(void) {
 		
 		
 		
+		
+		
+		
 		/////////////////////////////////////
 		// Drawing.
 		
@@ -217,11 +225,23 @@ int main(void) {
 		}
 		
 		
+		
+		
 		// Draw digits of stopwatch.
-		draw_sprite(red__p  [gs.digits[3]], 32, 64, (4-3)*40, 32);
-		draw_sprite(red__p  [gs.digits[2]], 32, 64, (4-2)*40, 32);
-		draw_sprite(green__p[gs.digits[1]], 32, 64, (4-1)*40, 32);
-		draw_sprite(green__p[gs.digits[0]], 32, 64, (4-0)*40, 32);
+		draw_sprite(
+			red__p  [gs.digits[3]], 32, 64, 32+(3-3)*40, 32
+		);
+		draw_sprite(
+			red__p  [gs.digits[2]], 32, 64, 32+(3-2)*40, 32
+		);
+		draw_sprite(
+			green__p[gs.digits[1]], 32, 64, 32+(3-1)*40, 32
+		);
+		draw_sprite(
+			green__p[gs.digits[0]], 32, 64, 32+(3-0)*40, 32
+		);
+		
+		
 		
 	}
 
