@@ -66,13 +66,13 @@ typedef struct {
 
 
 
+
 uint32_t* red__p[16] = {
 	red_0__p, red_1__p, red_2__p, red_3__p,
 	red_4__p, red_5__p, red_6__p, red_7__p,
 	red_8__p, red_9__p, red_a__p, red_b__p,
 	red_c__p, red_d__p, red_e__p, red_f__p
 };
-
 uint32_t* green__p[16] = {
 	green_0__p, green_1__p, green_2__p, green_3__p,
 	green_4__p, green_5__p, green_6__p, green_7__p,
@@ -95,6 +95,8 @@ static inline uint32_t shift_div_with_round_up(uint32_t num, uint32_t shift){
 	return d;
 }
 
+
+
 static void draw_sprite(
 	uint32_t* p,
 	uint16_t src_w,
@@ -106,10 +108,13 @@ static void draw_sprite(
 	uint16_t dst_x8 = shift_div_with_round_down(dst_x, 3);
 	uint16_t src_w8 = shift_div_with_round_up(src_w, 3);
 	
+	
 	for(uint16_t y = 0; y < src_h; y++){
 		for(uint16_t x8 = 0; x8 < src_w8; x8++){
-			uint32_t i = p[y*src_w8 + x8];
-			pack_idx4_p32[(dst_y+y)*SCREEN_IDX4_W8 + (dst_x8+x8)] = i;
+			uint32_t src_idx = y*src_w8 + x8;
+			uint32_t pixels = p[src_idx];
+			uint32_t dst_idx = (dst_y+y)*SCREEN_IDX4_W8 + (dst_x8+x8);
+			pack_idx4_p32[dst_idx] = pixels;
 		}
 	}
 	
@@ -210,7 +215,6 @@ int main(void) {
 				pack_idx4_p32[r1*SCREEN_IDX4_W8 + c8] = 0x00000000;
 			}
 		}
-		
 		
 		
 		// Draw digits of stopwatch.
