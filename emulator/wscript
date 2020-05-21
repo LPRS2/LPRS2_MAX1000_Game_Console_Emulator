@@ -18,8 +18,8 @@ def prerequisites(ctx):
 	if sys.platform.startswith('linux'):
 		# Ubuntu.
 		ctx.exec_command2('apt-get -y install libsfml-dev')
-	elif sys.platform == 'msys':
-		# MSYS2 Windows.
+	elif sys.platform == 'win32' and os.name == 'nt' and os.path.sep == '/':
+		# MSYS2 Windows /mingw32/bin/python.
 		ctx.exec_command2('pacman --noconfirm -S mingw-w64-i686-sfml')
 
 def options(opt):

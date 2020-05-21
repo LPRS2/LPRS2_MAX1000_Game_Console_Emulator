@@ -28,13 +28,15 @@ top = '.'
 
 def prerequisites(ctx):
 	ctx.recurse('emulator')
-
+	
 	if sys.platform.startswith('linux'):
 		# Ubuntu.
 		ctx.exec_command2('apt-get -y install python-pil')
-	elif sys.platform == 'msys':
-		# MSYS2 Windows.
-		ctx.exec_command2('pacman --noconfirm -S mingw-w64-python-pillow')
+	elif sys.platform == 'win32' and os.name == 'nt' and os.path.sep == '/':
+		# MSYS2 Windows /mingw32/bin/python.
+		ctx.exec_command2(
+			'pacman --noconfirm -S mingw-w64-i686-python-pillow'
+		)
 
 def options(opt):
 	opt.load('compiler_c compiler_cxx')
@@ -49,8 +51,13 @@ def configure(conf):
 	conf.env.append_value('CFLAGS', '-std=c99')
 	
 	conf.find_program(
-		'img_to_src.py',
+		'python',
+		var = 'PYTHON'
+	)
+	conf.find_program(
+		'img_to_src',
 		var = 'IMG_TO_SRC',
+		exts = '.py',
 		path_list = os.path.abspath('.')
 	)
 	
@@ -71,13 +78,14 @@ def build(bld):
 			glob.glob('images/red_*.png') + glob.glob('images/green_*.png')
 		)
 		bld(
-			rule = '${IMG_TO_SRC} -o ${TGT[0]} ${SRC} -f IDX4 ' + \
-				'-p 0x000000 -v',
+			rule = '${PYTHON} ${IMG_TO_SRC} -o ${TGT[0]} ${SRC} ' + \
+				'-f IDX4 -p 0x000000 -v',
 			source = digit_imgs,
 			target = ['sprites_idx4.c', 'sprites_idx4.h']
 		)
 		bld(
-			rule = '${IMG_TO_SRC} -o ${TGT[0]} ${SRC} -f RGB333',
+			rule = '${PYTHON} ${IMG_TO_SRC} -o ${TGT[0]} ${SRC} ' + \
+				'-f RGB333',
 			source = 'images/Pacman_Sprite_Map.png',
 			target = ['sprites_rgb333.c', 'sprites_rgb333.h']
 		)
