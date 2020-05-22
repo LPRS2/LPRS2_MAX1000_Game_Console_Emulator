@@ -73,37 +73,47 @@ def build(bld):
 			target = p
 		)
 		
-	if True:
-		digit_imgs = sorted(
-			glob.glob('images/red_*.png') + glob.glob('images/green_*.png')
-		)
-		bld(
-			rule = '${PYTHON} ${IMG_TO_SRC} -o ${TGT[0]} ${SRC} ' + \
-				'-f IDX4 -p 0x000000 -v',
-			source = digit_imgs,
-			target = ['sprites_idx4.c', 'sprites_idx4.h']
-		)
-		bld(
-			rule = '${PYTHON} ${IMG_TO_SRC} -o ${TGT[0]} ${SRC} ' + \
-				'-f RGB333',
-			source = 'images/Pacman_Sprite_Map.png',
-			target = ['sprites_rgb333.c', 'sprites_rgb333.h']
-		)
-		bld.program(
-			features = 'cxx',
-			source = ['sprites.c', 'sprites_idx4.c'],
-			includes = ['build/'],
-			use = 'emulator',
-			target = 'sprites'
-		)
-		bld.program(
-			features = 'cxx',
-			source = ['sprite_anim.c', 'sprites_rgb333.c'],
-			includes = ['build/'],
-			use = 'emulator',
-			target = 'sprite_anim'
-		)
+	digit_imgs = sorted(
+		glob.glob('images/red_*.png') + glob.glob('images/green_*.png')
+	)
+	bld(
+		rule = '${PYTHON} ${IMG_TO_SRC} -o ${TGT[0]} ${SRC} ' + \
+			'-f IDX4 -p 0x000000 -v',
+		source = digit_imgs,
+		target = ['sprites_idx4.c', 'sprites_idx4.h']
+	)
+	bld(
+		rule = '${PYTHON} ${IMG_TO_SRC} -o ${TGT[0]} ${SRC} ' + \
+			'-f RGB333',
+		source = 'images/Pacman_Sprite_Map.png',
+		target = ['sprites_rgb333.c', 'sprites_rgb333.h']
+	)
+	bld.program(
+		features = 'cxx',
+		source = ['sprites.c', 'sprites_idx4.c'],
+		includes = ['build/'],
+		use = 'emulator',
+		target = 'sprites'
+	)
+	bld.program(
+		features = 'cxx',
+		source = ['sprite_anim.c', 'sprites_rgb333.c'],
+		includes = ['build/'],
+		use = 'emulator',
+		target = 'sprite_anim'
+	)
 	
+	bld.program(
+		features = 'cxx',
+		source = ['project.c'],
+		includes = ['build/'],
+		use = 'emulator',
+		target = 'project'
+	)
+
+def run(ctx):
+	ctx.exec_command2('./build/project')
+
 ###############################################################################
 
 def exec_command2(self, cmd, **kw):
