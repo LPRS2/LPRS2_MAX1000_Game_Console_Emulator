@@ -3,7 +3,6 @@
 using Printf
 
 background_color = "black"
-#background_color = "white" #TODO For debug.
 
 function gen_digit(color_name, color, digit)
 	hex_digit = @sprintf("%x", digit)
