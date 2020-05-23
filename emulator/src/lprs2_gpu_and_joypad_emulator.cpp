@@ -151,9 +151,11 @@ public:
 	mutex window_mutex;
 	thread* main_thread;
 	uint32_t rgba8888[SCREEN_H][SCREEN_W];
+#if TWO_THREADS
 	thread* draw_thread;
 	semaphore rgba8888_drawn; // Wait by main, notify by draw.
 	semaphore rgba8888_filled; // Wait by draw, notify by main.
+#endif
 	Texture* texture;
 	Sprite sprite;
 	Font font;
@@ -311,6 +313,7 @@ public:
 		}
 	}
 	
+#if TWO_THREADS
 	void draw() {
 		// Draw (OpenGL) thread.
 		
@@ -331,6 +334,7 @@ public:
 			rgba8888_drawn.notify();
 		}
 	}
+#endif
 	
 	
 	void main() {
