@@ -21,6 +21,8 @@ def prerequisites(ctx):
 	elif sys.platform == 'win32' and os.name == 'nt' and os.path.sep == '/':
 		# MSYS2 Windows /mingw32/bin/python.
 		ctx.exec_command2('pacman --noconfirm -S mingw-w64-i686-sfml')
+		# Some bug that hurfbuzz does not automatically pull cairo.
+		ctx.exec_command2('pacman --noconfirm -S mingw-w64-i686-cairo')
 
 def options(opt):
 	pass
