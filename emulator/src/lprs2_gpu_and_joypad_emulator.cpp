@@ -158,13 +158,15 @@ public:
 #endif
 	Texture* texture;
 	Sprite sprite;
-	Font font;
-	Text text;
 	uint64_t frame;
 	Clock clock;
+#if SHOW_HEAD_UP_DISPLAY
+	Font font;
+	Text text;
 	uint32_t fps;
 	uint32_t Hz;
 	char buf[30];
+#endif
 	
 	void close_window() {
 		{
@@ -506,14 +508,16 @@ public:
 #else
 			draw_draw();
 #endif
-			
+#if SHOW_HEAD_UP_DISPLAY
 			fps = round(1000000.0/clock.getElapsedTime().asMicroseconds());
+#endif
 			
 			// Wait end of frame.
 			wait_until_us(FRAME_US);
 			
+#if SHOW_HEAD_UP_DISPLAY
 			Hz = round(1000000.0/clock.getElapsedTime().asMicroseconds());
-			
+#endif
 			frame++;
 		}
 		
