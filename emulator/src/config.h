@@ -11,7 +11,7 @@ extern "C" {
 
 #define TWO_THREADS 0
 
-#define SHOW_HEAD_UP_DISPLAY 0
+#define SHOW_HEAD_UP_DISPLAY 1
 #define FONT_PATH "emulator/share/UbuntuMono-B.ttf"
 
 #define EXTENDED_VSYNC_PAUSE_US 3000
