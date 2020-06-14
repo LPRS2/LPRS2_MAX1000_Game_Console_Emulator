@@ -227,19 +227,19 @@ public:
 				joypad_mem_map.s.a = s;
 				break;
 			case Keyboard::B:
-				joypad_mem_map.s.b = 1;
+				joypad_mem_map.s.b = s;
 				break;
 			case Keyboard::Z:
-				joypad_mem_map.s.z = 1;
+				joypad_mem_map.s.z = s;
 				break;
 			case Keyboard::S:
-				joypad_mem_map.s.start = 1;
+				joypad_mem_map.s.start = s;
 				break;
 			case Keyboard::L:
-				joypad_mem_map.s.l = 1;
+				joypad_mem_map.s.l = s;
 				break;
 			case Keyboard::R:
-				joypad_mem_map.s.r = 1;
+				joypad_mem_map.s.r = s;
 				break;
 			default:
 				break;
