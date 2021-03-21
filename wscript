@@ -39,12 +39,19 @@ def prerequisites(ctx):
 		)
 
 def options(opt):
-	opt.load('compiler_c compiler_cxx')
+	opt.load('gcc gxx')
+	
+	opt.add_option(
+		'--app',
+		dest = 'app',
+		default = None,
+		help = 'App to be run'
+	)
 	
 	opt.recurse('emulator')
 
 def configure(cfg):
-	cfg.load('compiler_c compiler_cxx')
+	cfg.load('gcc gxx')
 	
 	cfg.recurse('emulator')
 
@@ -112,7 +119,13 @@ def build(bld):
 	)
 
 def run(ctx):
-	ctx.exec_command2('./build/project')
+	'''./waf run --app=<NAME>'''
+	if ctx.options.app:
+		if sys.platform == 'win32':
+			# MSYS2
+			ctx.exec_command2('build\\' + ctx.options.app)
+		else:
+			ctx.exec_command2('./build/' + ctx.options.app)
 
 ###############################################################################
 
