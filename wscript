@@ -43,18 +43,18 @@ def options(opt):
 	
 	opt.recurse('emulator')
 
-def configure(conf):
-	conf.load('compiler_c compiler_cxx')
+def configure(cfg):
+	cfg.load('compiler_c compiler_cxx')
 	
-	conf.recurse('emulator')
+	cfg.recurse('emulator')
 
-	conf.env.append_value('CFLAGS', '-std=c99')
+	cfg.env.append_value('CFLAGS', '-std=c99')
 	
-	conf.find_program(
+	cfg.find_program(
 		'python',
 		var = 'PYTHON'
 	)
-	conf.find_program(
+	cfg.find_program(
 		'img_to_src',
 		var = 'IMG_TO_SRC',
 		exts = '.py',

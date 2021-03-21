@@ -27,11 +27,11 @@ def prerequisites(ctx):
 def options(opt):
 	pass
 
-def configure(conf):
-	conf.env.append_value('CXXFLAGS', '-std=c++11')
-	conf.env.append_value('LIB', 'pthread')
+def configure(cfg):
+	cfg.env.append_value('CXXFLAGS', '-std=c++11')
+	cfg.env.append_value('LIB', 'pthread')
 	
-	conf.check_cfg(
+	cfg.check_cfg(
 		package = 'sfml-graphics',
 		uselib_store = 'SFML',
 		args = '--cflags --libs',
